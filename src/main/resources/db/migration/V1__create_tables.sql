@@ -4,7 +4,7 @@ CREATE TABLE users (
                        last_name VARCHAR(255) NOT NULL,
                        email VARCHAR(255) NOT NULL,
                        password VARCHAR(255) NOT NULL,
-                       enabled BOOLEAN NOT NULL
+                       enabled tinyint(1) NOT NULL DEFAULT '1'
 );
 
 CREATE TABLE projects (

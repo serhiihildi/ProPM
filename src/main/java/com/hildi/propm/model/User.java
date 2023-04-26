@@ -23,7 +23,7 @@ public class User {
 
     private String firstName;
 
-    private String lastName;
+    private String username;
 
     private String email;
 
@@ -42,4 +42,9 @@ public class User {
 
     @ManyToMany(mappedBy = "developers", fetch = FetchType.LAZY)
     private Set<Project> assignedProjects = new HashSet<>();
+
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
 }
