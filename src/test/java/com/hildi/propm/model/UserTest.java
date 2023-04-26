@@ -52,12 +52,4 @@ public class UserTest {
         user.setPassword(password);
         assertEquals(password, user.getPassword());
     }
-
-//    @Test
-//    public void testSetAndGetRole() {
-//        User user = new User();
-//        Role role = Role.ADMIN;
-//        user.setRole(role);
-//        assertEquals(role, user.getRole());
-//    }
 }
