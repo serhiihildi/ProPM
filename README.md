@@ -1,5 +1,6 @@
-# ProPM
-#### ProPM is a project management application built using Java and Spring Boot.
+# Project Title
+
+Short project description.
 
 ## Technologies Used
 
