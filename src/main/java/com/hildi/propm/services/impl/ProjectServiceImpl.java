@@ -1,19 +1,16 @@
 package com.hildi.propm.services.impl;
 
 import com.hildi.propm.dto.ProjectDto;
-import com.hildi.propm.dto.RoleDto;
-import com.hildi.propm.dto.TaskDto;
+import com.hildi.propm.exception.ResourceNotFoundException;
 import com.hildi.propm.model.Project;
 import com.hildi.propm.repository.ProjectRepository;
 import com.hildi.propm.services.ProjectService;
 import com.hildi.propm.util.ProjectMapper;
-import com.hildi.propm.util.RoleMapper;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,117 +18,53 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
-    private final RoleMapper roleMapper;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, RoleMapper roleMapper) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
-        this.roleMapper = roleMapper;
     }
 
     @Override
     public List<ProjectDto> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
-        return projects.stream()
-                .map(projectMapper::toDto)
-                .collect(Collectors.toList());
+        return projectMapper.toDtoList(projects);
     }
 
     @Override
-    public ProjectDto getProjectById(Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Project not found with id " + projectId));
-        return projectMapper.toDto(project);
-    }
-
-    @Override
-    public ProjectDto createProject(Long projectId, ProjectDto projectDto) {
-        return null;
+    public ProjectDto getProjectById(Long id) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            return projectMapper.toDto(project);
+        } else {
+            throw new ResourceNotFoundException("Project with id " + id + " not found");
+        }
     }
 
     @Override
     public ProjectDto createProject(ProjectDto projectDto) {
-        return null;
+        Project project = projectMapper.toEntity(projectDto);
+        project = projectRepository.save(project);
+        return projectMapper.toDto(project);
     }
 
     @Override
-    public ProjectDto updateProject(Long projectId, ProjectDto projectDto) {
-        return null;
+    public ProjectDto updateProject(Long id, ProjectDto projectDto) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
+
+        projectMapper.updateProjectFromDto(projectDto, project);
+
+        Project updatedProject = projectRepository.save(project);
+        return projectMapper.toDto(updatedProject);
     }
 
     @Override
-    public void deleteProject(Long id, Long projectId) {
+    public void deleteProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
 
-    }
-
-    @Override
-    public void deleteProject(Long projectId) {
-
-    }
-
-    @Override
-    public List<RoleDto> getRolesByProjectId(Long projectId) {
-        return null;
-    }
-
-    @Override
-    public RoleDto createRole(Long projectId, RoleDto roleDto) {
-        return null;
-    }
-
-    @Override
-    public RoleDto updateRole(Long roleId, RoleDto roleDto) {
-        return null;
-    }
-
-    @Override
-    public void deleteRole(Long roleId) {
-
-    }
-
-    @Override
-    public List<TaskDto> getTasksByProjectId(Long projectId) {
-        return null;
-    }
-
-    @Override
-    public TaskDto getTaskById(Long taskId) {
-        return null;
-    }
-
-    @Override
-    public TaskDto createTask(Long projectId, TaskDto taskDto) {
-        return null;
-    }
-
-    @Override
-    public TaskDto updateTask(Long taskId, TaskDto taskDto) {
-        return null;
-    }
-
-    @Override
-    public void deleteTask(Long taskId) {
-
-    }
-
-    @Override
-    public List<TaskDto> getTasksByAssignee(Long userId) {
-        return null;
-    }
-
-    @Override
-    public List<TaskDto> getTasksByAssigneeAndProjectId(Long userId, Long projectId) {
-        return null;
-    }
-
-    @Override
-    public List<TaskDto> getTasksByCreator(Long userId) {
-        return null;
-    }
-
-    @Override
-    public List<TaskDto> getTasksByCreatorAndProjectId(Long userId, Long projectId) {
-        return null;
+        projectRepository.delete(project);
     }
 }
 

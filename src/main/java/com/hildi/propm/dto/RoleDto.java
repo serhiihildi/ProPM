@@ -16,4 +16,9 @@ public class RoleDto {
     private String name;
     private String description;
     private List<UserDto> users;
+
+    public RoleDto(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

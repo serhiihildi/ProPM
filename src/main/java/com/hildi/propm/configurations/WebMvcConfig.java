@@ -43,10 +43,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.US);
-        return localeResolver;
+    public LocaleResolver customLocaleResolver() {
+        AcceptHeaderLocaleResolver customLocaleResolver = new AcceptHeaderLocaleResolver();
+        customLocaleResolver.setDefaultLocale(Locale.US);
+        return customLocaleResolver;
     }
 
     @Override
