@@ -1,16 +1,18 @@
 package com.hildi.propm.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Role {
 
     @Id
@@ -19,12 +21,9 @@ public class Role {
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<User> users = new HashSet<>();
+    private String description;
 
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 }
 

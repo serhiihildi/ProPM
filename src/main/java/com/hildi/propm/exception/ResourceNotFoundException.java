@@ -2,7 +2,7 @@ package com.hildi.propm.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
-    public ResourceNotFoundException(String message, String id, Long aLong) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 

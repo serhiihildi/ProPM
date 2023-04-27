@@ -1,59 +1,55 @@
 package com.hildi.propm.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.scheduling.config.Task;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "projects")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
-    @ToString.Exclude
-    private User manager;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "project_developers",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "developer_id"))
-    @ToString.Exclude
-    private Set<User> developers = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    public Project(String name, String description, LocalDate startDate, LocalDate endDate) {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public void addRole(Role role) {
+        roles.add(role);
+        role.setProject(this);
     }
 
-    public Project(Long id, String name, String description, User manager, Set<User> developers, LocalDate startDate, LocalDate endDate) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.manager = manager;
-        this.developers = developers;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.setProject(null);
     }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setProject(this);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setProject(null);
+    }
+
 }
