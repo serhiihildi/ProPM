@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Project {
@@ -42,6 +41,12 @@ public class Project {
         this.description = description;
         this.roles = roles;
         this.tasks = tasks;
+    }
+
+    public Project(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     @Override

@@ -8,12 +8,16 @@ import com.hildi.propm.repository.TaskRepository;
 import com.hildi.propm.services.TaskService;
 import com.hildi.propm.util.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional
 public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
@@ -92,7 +96,6 @@ public class TaskServiceImpl implements TaskService {
         }
         Project project = optionalProject.get();
 
-        new Task().getId();
         Optional<Task> optionalTask = project.getTasks().stream().filter(t -> t.getId().equals(taskId)).findFirst();
         if (optionalTask.isEmpty()) {
             return false;
@@ -115,7 +118,6 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + taskId + " not found in project with id " + projectId));
         return taskMapper.toDto(task);
     }
-
 
 
 }

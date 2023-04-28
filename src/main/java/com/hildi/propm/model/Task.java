@@ -14,7 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@RequiredArgsConstructor
 @Getter
 @Setter
 public class Task {

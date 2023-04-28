@@ -1,13 +1,13 @@
 package com.hildi.propm.services;
 
 import com.hildi.propm.dto.ProjectDto;
-import com.hildi.propm.dto.RoleDto;
-import com.hildi.propm.dto.TaskDto;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public interface ProjectService {
     List<ProjectDto> getAllProjects();
 

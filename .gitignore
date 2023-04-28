@@ -1,3 +1,20 @@
+# Compiled class file
+*.class
+
+# Log files
+*.log
+
+# IntelliJ IDEA files
+.idea/
+
+# Maven files
+target/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
 target/
 .mvn/wrapper/maven-wrapper.jar
 **/src/main/**/target/
