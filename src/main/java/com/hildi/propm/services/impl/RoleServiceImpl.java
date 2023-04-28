@@ -1,9 +1,9 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.dto.RoleDto;
+import com.hildi.propm.model.dto.RoleDto;
 import com.hildi.propm.repository.RoleRepository;
 import com.hildi.propm.services.RoleService;
-import com.hildi.propm.util.RoleMapper;
+import com.hildi.propm.util.mapper.CustomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,12 @@ import java.util.List;
 @Transactional
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
+    private final CustomMapper mapper;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
+    public RoleServiceImpl(RoleRepository roleRepository, CustomMapper mapper) {
         this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
+        this.mapper = mapper;
     }
 
     @Override

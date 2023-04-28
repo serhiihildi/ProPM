@@ -1,4 +1,4 @@
-package com.hildi.propm.configurations;
+package com.hildi.propm.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.hildi.propm.configurations;
+package com.hildi.propm.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,10 +58,11 @@ public class DataSourceConfig {
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.hbm2ddl.auto", "none");
         return properties;
     }
+
 }
 

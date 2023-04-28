@@ -1,12 +1,12 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.dto.UserDto;
+import com.hildi.propm.model.dto.UserDto;
+import com.hildi.propm.model.Role;
 import com.hildi.propm.model.User;
 import com.hildi.propm.repository.UserRepository;
 import com.hildi.propm.security.CustomPasswordEncoder;
 import com.hildi.propm.services.UserService;
-import com.hildi.propm.util.RoleMapper;
-import com.hildi.propm.util.UserMapper;
+import com.hildi.propm.util.mapper.CustomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +20,29 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CustomPasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
+    private final CustomMapper mapper;
+    ;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CustomPasswordEncoder passwordEncoder, UserMapper userMapper, RoleMapper roleMapper) {
+    public UserServiceImpl(UserRepository userRepository, CustomPasswordEncoder passwordEncoder, CustomMapper mapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
-        this.roleMapper = roleMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
+        User user = mapper.toEntity(userDto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
-        return userMapper.toDto(user);
+        return mapper.toDto(user, UserDto.class);
     }
 
     @Override
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
-        return userMapper.toDto(user);
+        return mapper.toDto(user, UserDto.class);
     }
 
     @Override
@@ -60,10 +59,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        user.setRoles(roleMapper.toEntityList(userDto.getRoles()));
+        user.setRoles(mapper.toEntitySet(userDto.getRoles(), Role.class));
         user = userRepository.save(user);
 
-        return userMapper.toDto(user);
+        return mapper.toDto(user, UserDto.class);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return userMapper.toDtoList(users);
+        return mapper.toDtoList(users, UserDto.class);
     }
 }
 

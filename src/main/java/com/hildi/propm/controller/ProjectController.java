@@ -1,6 +1,6 @@
 package com.hildi.propm.controller;
 
-import com.hildi.propm.dto.ProjectDto;
+import com.hildi.propm.model.dto.ProjectDto;
 import com.hildi.propm.services.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

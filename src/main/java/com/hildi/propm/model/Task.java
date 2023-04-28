@@ -23,23 +23,25 @@ public class Task {
     @Getter
     private Long id;
 
-    @NotBlank
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
     @JsonIgnore
     @ToString.Exclude
     private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
     @JsonIgnore
     @ToString.Exclude
     private Role role;
 
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;

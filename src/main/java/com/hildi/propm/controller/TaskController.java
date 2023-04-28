@@ -1,8 +1,7 @@
 package com.hildi.propm.controller;
 
-import com.hildi.propm.dto.TaskDto;
+import com.hildi.propm.model.dto.TaskDto;
 import com.hildi.propm.services.TaskService;
-import com.hildi.propm.util.TaskMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,11 +13,9 @@ import java.util.List;
 @RequestMapping("/projects/{projectId}/tasks")
 public class TaskController {
     private final TaskService taskService;
-    private final TaskMapper taskMapper;
 
-    public TaskController(TaskService taskService, TaskMapper taskMapper) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.taskMapper = taskMapper;
     }
 
     @GetMapping("")

@@ -1,4 +1,4 @@
-package com.hildi.propm.dto;
+package com.hildi.propm.model.dto;
 
 import lombok.*;
 

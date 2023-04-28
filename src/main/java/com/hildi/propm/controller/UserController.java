@@ -1,9 +1,7 @@
 package com.hildi.propm.controller;
 
-import com.hildi.propm.dto.UserDto;
-import com.hildi.propm.model.User;
+import com.hildi.propm.model.dto.UserDto;
 import com.hildi.propm.services.UserService;
-import com.hildi.propm.util.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +15,9 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @GetMapping("/{id}")

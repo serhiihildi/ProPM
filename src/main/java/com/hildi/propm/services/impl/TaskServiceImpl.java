@@ -1,12 +1,12 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.dto.TaskDto;
+import com.hildi.propm.model.dto.TaskDto;
 import com.hildi.propm.model.Project;
 import com.hildi.propm.model.Task;
 import com.hildi.propm.repository.ProjectRepository;
 import com.hildi.propm.repository.TaskRepository;
 import com.hildi.propm.services.TaskService;
-import com.hildi.propm.util.TaskMapper;
+import com.hildi.propm.util.mapper.CustomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
-    private final TaskMapper taskMapper;
+    private final CustomMapper mapper;
 
     @Autowired
-    public TaskServiceImpl(ProjectRepository projectRepository, TaskRepository taskRepository, TaskMapper taskMapper) {
+    public TaskServiceImpl(ProjectRepository projectRepository, TaskRepository taskRepository, CustomMapper mapper) {
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
-        this.taskMapper = taskMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id " + projectId));
         List<Task> tasks = taskRepository.findByProject(project);
         return tasks.stream()
-                .map(taskMapper::toDto)
+                .map(task -> mapper.toDto(task, TaskDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
-            return taskMapper.toDto(task);
+            return mapper.toDto(task, TaskDto.class);
         } else {
             throw new EntityNotFoundException("Task not found with id " + taskId);
         }
@@ -56,10 +56,10 @@ public class TaskServiceImpl implements TaskService {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-            Task task = taskMapper.toEntity(taskDto);
+            Task task = mapper.toEntity(taskDto, Task.class);
             task.setProject(project);
             Task savedTask = taskRepository.save(task);
-            return taskMapper.toDto(savedTask);
+            return mapper.toDto(savedTask, TaskDto.class);
         } else {
             throw new EntityNotFoundException("Project not found with id " + projectId);
         }
@@ -78,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
 //                task.setDueDate(taskDto.getDueDate());
 //                task.setAssignee(userMapper.toEntity(taskDto.getAssignee()));
                 Task updatedTask = taskRepository.save(task);
-                return taskMapper.toDto(updatedTask);
+                return mapper.toDto(updatedTask, TaskDto.class);
             } else {
                 throw new EntityNotFoundException("Task not found with id " + taskId + " and projectId " + projectId);
             }
@@ -116,8 +116,7 @@ public class TaskServiceImpl implements TaskService {
                 .filter(t -> t.getId().equals(taskId))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + taskId + " not found in project with id " + projectId));
-        return taskMapper.toDto(task);
+        return mapper.toDto(task, TaskDto.class);
     }
-
 
 }

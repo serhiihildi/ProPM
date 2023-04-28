@@ -1,6 +1,6 @@
 package com.hildi.propm.controller;
 
-import com.hildi.propm.dto.RoleDto;
+import com.hildi.propm.model.dto.RoleDto;
 import com.hildi.propm.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

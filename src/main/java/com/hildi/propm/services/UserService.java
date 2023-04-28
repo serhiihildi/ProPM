@@ -1,6 +1,6 @@
 package com.hildi.propm.services;
 
-import com.hildi.propm.dto.UserDto;
+import com.hildi.propm.model.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
