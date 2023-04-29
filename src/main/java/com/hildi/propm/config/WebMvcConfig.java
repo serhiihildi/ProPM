@@ -16,10 +16,12 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import java.util.List;
 import java.util.Locale;
 
+// серкит брейкинг паттерн
+// секюрити, сваггер, логгирование, микромитр, трейсинг
+
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

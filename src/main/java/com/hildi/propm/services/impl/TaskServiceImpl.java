@@ -1,8 +1,8 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.model.dto.TaskDto;
 import com.hildi.propm.model.Project;
 import com.hildi.propm.model.Task;
+import com.hildi.propm.model.dto.TaskDto;
 import com.hildi.propm.repository.ProjectRepository;
 import com.hildi.propm.repository.TaskRepository;
 import com.hildi.propm.services.TaskService;

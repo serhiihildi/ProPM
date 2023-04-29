@@ -1,7 +1,4 @@
 
-:
-
-Dockerfile,6/6/6651ddff6eb82c840ced7c1dddee15c6e1913dd4
 l
 <src/main/java/com/hildi/propm/repository/RoleRepository.java,b/3/b37e67a5fee65e272ab2e8db91b72d7fdbf7619e
 o
@@ -14,9 +11,6 @@ l
 <src/main/java/com/hildi/propm/repository/TaskRepository.java,1/f/1f43d8f583b5f09a33b6fd8aa7c8313a717c1aa7
 d
 4src/main/java/com/hildi/propm/model/dto/TaskDto.java,1/2/128dcbe329ea530ea366e950391cfd8832ae8894
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 j
@@ -31,8 +25,6 @@ d
 4src/main/java/com/hildi/propm/model/dto/UserDto.java,a/8/a8f347cc3d39d4bbdf71122aff43a89bb4e5c968
 l
 <src/main/java/com/hildi/propm/repository/UserRepository.java,b/b/bbb1606e9f9466e4d926fc1f163c047d4acd1dab
-B
-docker-compose.yml,3/5/35b8c13cf2eb2a194eada000eb310d65aed53b2a
 ]
 -src/main/java/com/hildi/propm/model/User.java,b/7/b78c36664b645724f064e05ab84bb8097f883c69
 ]

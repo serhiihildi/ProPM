@@ -1,8 +1,8 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.model.dto.UserDto;
 import com.hildi.propm.model.Role;
 import com.hildi.propm.model.User;
+import com.hildi.propm.model.dto.UserDto;
 import com.hildi.propm.repository.UserRepository;
 import com.hildi.propm.security.CustomPasswordEncoder;
 import com.hildi.propm.services.UserService;

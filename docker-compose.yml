@@ -10,7 +10,7 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/propm_db?useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/propm_db?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -20,6 +20,7 @@ services:
     environment:
       MYSQL_DATABASE: propm_db
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"
     volumes:

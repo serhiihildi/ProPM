@@ -5,7 +5,9 @@
 *.log
 
 # IntelliJ IDEA files
+*.idea
 .idea/
+.idea/*
 
 # Maven files
 target/

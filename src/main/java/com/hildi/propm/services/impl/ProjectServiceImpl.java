@@ -1,8 +1,8 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.model.dto.ProjectDto;
 import com.hildi.propm.exception.ResourceNotFoundException;
 import com.hildi.propm.model.Project;
+import com.hildi.propm.model.dto.ProjectDto;
 import com.hildi.propm.repository.ProjectRepository;
 import com.hildi.propm.services.ProjectService;
 import com.hildi.propm.util.mapper.CustomMapper;
