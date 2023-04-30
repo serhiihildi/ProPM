@@ -16,24 +16,16 @@ public class CustomMapper {
         modelMapper = new ModelMapper();
     }
 
-    public <S, T> T toDto(S entity, Class<T> dtoClass) {
-        return modelMapper.map(entity, dtoClass);
+    public <S, T> T map(S source, Class<T> targetClass) {
+        return modelMapper.map(source, targetClass);
     }
 
-    public <S, T> S toEntity(T dto, Class<S> entityClass) {
-        return modelMapper.map(dto, entityClass);
+    public <S, T> List<T> map(List<S> sourceList, Class<T> targetClass) {
+        return sourceList.stream().map(source -> map(source, targetClass)).collect(Collectors.toList());
     }
 
-    public <S, T> List<T> toDtoList(List<S> entityList, Class<T> dtoClass) {
-        return entityList.stream().map(entity -> toDto(entity, dtoClass)).collect(Collectors.toList());
-    }
-
-    public <S, T> List<S> toEntityList(List<T> dtoList, Class<S> entityClass) {
-        return dtoList.stream().map(dto -> toEntity(dto, entityClass)).collect(Collectors.toList());
-    }
-
-    public <S, T> Set<S> toEntitySet(Set<T> dtoList, Class<S> entityClass) {
-        return dtoList.stream().map(dto -> toEntity(dto, entityClass)).collect(Collectors.toSet());
+    public <S, T> Set<T> map(Set<S> sourceSet, Class<T> targetClass) {
+        return sourceSet.stream().map(source -> map(source, targetClass)).collect(Collectors.toSet());
     }
 
 }

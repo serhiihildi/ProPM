@@ -2,6 +2,7 @@ package com.hildi.propm.controller;
 
 import com.hildi.propm.model.dto.RoleDto;
 import com.hildi.propm.services.RoleService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRole);
     }
 
+    @SneakyThrows
     @PutMapping("/{id}")
     public ResponseEntity<RoleDto> updateRole(@PathVariable Long id, @RequestBody RoleDto roleDto) {
         RoleDto updatedRole = roleService.updateRole(id, roleDto);

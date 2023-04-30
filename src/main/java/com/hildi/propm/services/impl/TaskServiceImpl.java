@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id " + projectId));
         List<Task> tasks = taskRepository.findByProject(project);
         return tasks.stream()
-                .map(task -> mapper.toDto(task, TaskDto.class))
+                .map(task -> mapper.map(task, TaskDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
-            return mapper.toDto(task, TaskDto.class);
+            return mapper.map(task, TaskDto.class);
         } else {
             throw new EntityNotFoundException("Task not found with id " + taskId);
         }
@@ -56,10 +56,10 @@ public class TaskServiceImpl implements TaskService {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-            Task task = mapper.toEntity(taskDto, Task.class);
+            Task task = mapper.map(taskDto, Task.class);
             task.setProject(project);
             Task savedTask = taskRepository.save(task);
-            return mapper.toDto(savedTask, TaskDto.class);
+            return mapper.map(savedTask, TaskDto.class);
         } else {
             throw new EntityNotFoundException("Project not found with id " + projectId);
         }
@@ -78,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
 //                task.setDueDate(taskDto.getDueDate());
 //                task.setAssignee(userMapper.toEntity(taskDto.getAssignee()));
                 Task updatedTask = taskRepository.save(task);
-                return mapper.toDto(updatedTask, TaskDto.class);
+                return mapper.map(updatedTask, TaskDto.class);
             } else {
                 throw new EntityNotFoundException("Task not found with id " + taskId + " and projectId " + projectId);
             }
@@ -116,7 +116,7 @@ public class TaskServiceImpl implements TaskService {
                 .filter(t -> t.getId().equals(taskId))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + taskId + " not found in project with id " + projectId));
-        return mapper.toDto(task, TaskDto.class);
+        return mapper.map(task, TaskDto.class);
     }
 
 }

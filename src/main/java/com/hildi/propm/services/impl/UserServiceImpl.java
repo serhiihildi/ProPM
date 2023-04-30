@@ -32,17 +32,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = mapper.toEntity(userDto, User.class);
+        User user = mapper.map(userDto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
-        return mapper.toDto(user, UserDto.class);
+        return mapper.map(user, UserDto.class);
     }
 
     @Override
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
-        return mapper.toDto(user, UserDto.class);
+        return mapper.map(user, UserDto.class);
     }
 
     @Override
@@ -59,10 +59,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        user.setRoles(mapper.toEntitySet(userDto.getRoles(), Role.class));
+        user.setRoles(mapper.map(userDto.getRoles(), Role.class));
         user = userRepository.save(user);
 
-        return mapper.toDto(user, UserDto.class);
+        return mapper.map(user, UserDto.class);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return mapper.toDtoList(users, UserDto.class);
+        return mapper.map(users, UserDto.class);
     }
 }
 

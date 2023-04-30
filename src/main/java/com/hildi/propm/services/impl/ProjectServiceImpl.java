@@ -27,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectDto> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
-        return mapper.toDtoList(projects, ProjectDto.class);
+        return mapper.map(projects, ProjectDto.class);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
         Optional<Project> projectOptional = projectRepository.findById(id);
         if (projectOptional.isPresent()) {
             Project project = projectOptional.get();
-            return mapper.toDto(project, ProjectDto.class);
+            return mapper.map(project, ProjectDto.class);
         } else {
             throw new ResourceNotFoundException("Project with id " + id + " not found");
         }
@@ -43,9 +43,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto createProject(ProjectDto projectDto) {
-        Project project = mapper.toEntity(projectDto, Project.class);
+        Project project = mapper.map(projectDto, Project.class);
         project = projectRepository.save(project);
-        return mapper.toDto(project, ProjectDto.class);
+        return mapper.map(project, ProjectDto.class);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ProjectServiceImpl implements ProjectService {
 //        mapper.updateProjectFromDto(projectDto, project);
 
         Project updatedProject = projectRepository.save(project);
-        return mapper.toDto(updatedProject, ProjectDto.class);
+        return mapper.map(updatedProject, ProjectDto.class);
     }
 
     @Override
