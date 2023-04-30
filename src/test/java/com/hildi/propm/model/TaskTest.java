@@ -26,7 +26,7 @@ class TaskTest {
     @Test
     @DisplayName("Create Task with null values")
     void createTaskWithNullValues() {
-        Task task = new Task(null, null, null);
+        Task task = new Task(null, null, null, null, null, null, null);
         assertNull(task.getId());
         assertNull(task.getName());
         assertNull(task.getDescription());

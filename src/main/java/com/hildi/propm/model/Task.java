@@ -14,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Task {
 
     @Id
@@ -50,6 +51,11 @@ public class Task {
         this.description = description;
     }
 
+    public Task(String name, String description, Project project) {
+        this.name = name;
+        this.description = description;
+        this.project = project;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,18 +1,10 @@
 
-o
-?src/main/java/com/hildi/propm/repository/ProjectRepository.java,4/d/4da7746a1ac62d34b5d04302f82758d4ddc0c4e6
-l
-<src/main/java/com/hildi/propm/repository/TaskRepository.java,1/f/1f43d8f583b5f09a33b6fd8aa7c8313a717c1aa7
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-j
-:src/main/java/com/hildi/propm/services/ProjectService.java,7/1/71bc1bde8571805c8db38efd7eb00a51cd383ed8
 g
 7src/main/java/com/hildi/propm/services/TaskService.java,8/8/88bf82d84c91ceaf84e30f6abed19366508438bd
 g
 7src/main/java/com/hildi/propm/services/UserService.java,1/e/1e989f50ae4c68764e039cef0bf968b77d40ccad
-l
-<src/main/java/com/hildi/propm/repository/UserRepository.java,b/b/bbb1606e9f9466e4d926fc1f163c047d4acd1dab
 q
 Asrc/main/java/com/hildi/propm/security/CustomPasswordEncoder.java,3/0/30062badf728e46cff16134e47b1a8aed24c3859
 v

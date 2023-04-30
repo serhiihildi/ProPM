@@ -1,7 +1,6 @@
 package com.hildi.propm.model;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Project {
 
@@ -35,14 +35,6 @@ public class Project {
     @ToString.Exclude
     private List<Task> tasks = new ArrayList<>();
 
-    public Project(Long id, String name, String description, List<Role> roles, List<Task> tasks) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.roles = roles;
-        this.tasks = tasks;
-    }
-
     public Project(Long id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -52,13 +44,13 @@ public class Project {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return id != null && Objects.equals(id, project.id);
+        return Objects.equals(id, project.id) && Objects.equals(name, project.name) && Objects.equals(description, project.description) && Objects.equals(roles, project.roles) && Objects.equals(tasks, project.tasks);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, name, description, roles, tasks);
     }
 }

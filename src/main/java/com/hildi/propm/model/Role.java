@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "role")
+@Builder
 public class Role {
 
     @Id
