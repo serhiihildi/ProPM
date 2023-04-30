@@ -12,7 +12,6 @@ import java.util.Objects;
 @Table(name = "task")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Getter
 @Setter
 public class Task {

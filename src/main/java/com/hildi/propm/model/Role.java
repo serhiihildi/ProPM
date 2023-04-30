@@ -11,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "role")
 public class Role {
@@ -65,4 +66,3 @@ public class Role {
         return getClass().hashCode();
     }
 }
-

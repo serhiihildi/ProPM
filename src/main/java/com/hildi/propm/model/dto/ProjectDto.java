@@ -16,10 +16,4 @@ public class ProjectDto {
     private String name;
     private String description;
     private List<UserDto> users;
-
-    public ProjectDto(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
 }

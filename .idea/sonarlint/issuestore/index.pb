@@ -1,16 +1,8 @@
 
-l
-<src/main/java/com/hildi/propm/repository/RoleRepository.java,b/3/b37e67a5fee65e272ab2e8db91b72d7fdbf7619e
 o
 ?src/main/java/com/hildi/propm/repository/ProjectRepository.java,4/d/4da7746a1ac62d34b5d04302f82758d4ddc0c4e6
-g
-7src/main/java/com/hildi/propm/model/dto/ProjectDto.java,1/a/1a5c62283f1fef5636378c45b93ddf28c498829b
-d
-4src/main/java/com/hildi/propm/model/dto/RoleDto.java,a/9/a91ef2ab7ac2c6a3a26d79806cffbfe19b847cbc
 l
 <src/main/java/com/hildi/propm/repository/TaskRepository.java,1/f/1f43d8f583b5f09a33b6fd8aa7c8313a717c1aa7
-d
-4src/main/java/com/hildi/propm/model/dto/TaskDto.java,1/2/128dcbe329ea530ea366e950391cfd8832ae8894
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 j
@@ -19,8 +11,6 @@ g
 7src/main/java/com/hildi/propm/services/TaskService.java,8/8/88bf82d84c91ceaf84e30f6abed19366508438bd
 g
 7src/main/java/com/hildi/propm/services/UserService.java,1/e/1e989f50ae4c68764e039cef0bf968b77d40ccad
-d
-4src/main/java/com/hildi/propm/model/dto/UserDto.java,a/8/a8f347cc3d39d4bbdf71122aff43a89bb4e5c968
 l
 <src/main/java/com/hildi/propm/repository/UserRepository.java,b/b/bbb1606e9f9466e4d926fc1f163c047d4acd1dab
 q
