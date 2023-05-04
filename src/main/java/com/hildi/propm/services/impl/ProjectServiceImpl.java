@@ -6,6 +6,7 @@ import com.hildi.propm.model.dto.ProjectDto;
 import com.hildi.propm.repository.ProjectRepository;
 import com.hildi.propm.services.ProjectService;
 import com.hildi.propm.util.mapper.CustomMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -50,15 +52,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto updateProject(Long id, ProjectDto projectDto) {
+        log.debug("Updating project with id {}: {}", id, projectDto);
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
-
-        //TODO
-//        mapper.updateProjectFromDto(projectDto, project);
-
-        Project updatedProject = projectRepository.save(project);
-        return mapper.map(updatedProject, ProjectDto.class);
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "id", id));
+        projectRepository.save(project);
+        ProjectDto updatedProjectDto = mapper.map(project, ProjectDto.class);
+        log.debug("Updated project: {}", updatedProjectDto);
+        return updatedProjectDto;
     }
+
 
     @Override
     public void deleteProject(Long id) {
