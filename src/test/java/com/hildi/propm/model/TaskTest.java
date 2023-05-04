@@ -17,9 +17,6 @@ class TaskTest {
     @Mock
     private Project project;
 
-    @Mock
-    private Role role;
-
     private final LocalDateTime createdDate = LocalDateTime.of(2022, 1, 1, 0, 0);
     private final LocalDateTime updatedDate = LocalDateTime.of(2022, 1, 2, 0, 0);
 
@@ -40,7 +37,7 @@ class TaskTest {
     @DisplayName("Create Task with non-null values")
     void createTaskWithNonNullValues() {
         Project project = new Project(1L, "Test Project", "Test project description", null, null);
-        Role role = new Role(1L, "Test Role", "Test role description", null, project);
+        Role role = Role.ROLE_USER;
         LocalDateTime createdDate = LocalDateTime.now();
         LocalDateTime updatedDate = LocalDateTime.now().plusHours(1);
 
@@ -87,8 +84,8 @@ class TaskTest {
         task.setProject(project);
         assertEquals(project, task.getProject());
 
-        task.setRole(role);
-        assertEquals(role, task.getRole());
+        task.setRole(Role.ROLE_ADMIN);
+        assertEquals(Role.ROLE_ADMIN, task.getRole());
 
         task.setCreatedDate(createdDate);
         assertEquals(createdDate, task.getCreatedDate());

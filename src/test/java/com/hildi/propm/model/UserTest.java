@@ -19,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 class UserTest {
 
-    @Mock
-    private Role role;
-
     @InjectMocks
     private User user;
 
@@ -57,7 +54,7 @@ class UserTest {
     @DisplayName("User should have roles")
     void shouldHaveRoles() {
         Set<Role> roles = new HashSet<>();
-        roles.add(role);
+        roles.add(Role.ROLE_USER);
 
         user.setRoles(roles);
         assertEquals(1, user.getRoles().size());
@@ -81,7 +78,7 @@ class UserTest {
     @Test
     @DisplayName("User should not be equal to another User with a different ID")
     void shouldNotBeEqual() {
-        User anotherUser = new User("John", "Doe", "johndoe@example.com", "password");
+        User anotherUser = new User(1L, "John", "Doe", "johndoe@example.com", "password");
         anotherUser.setId(2L);
         Assertions.assertNotEquals(user, anotherUser);
     }
@@ -96,7 +93,7 @@ class UserTest {
     @Test
     @DisplayName("User should have correct hash code")
     void shouldHaveCorrectHashCode() {
-        User anotherUser = new User("John", "Doe", "johndoe@example.com", "password");
+        User anotherUser = new User(1L, "John", "Doe", "johndoe@example.com", "password");
         assertEquals(user.hashCode(), anotherUser.hashCode());
     }
 }

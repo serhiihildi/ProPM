@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomMapper mapper;
-    ;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, CustomPasswordEncoder passwordEncoder, CustomMapper mapper) {
@@ -59,7 +61,8 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        user.setRoles(mapper.map(userDto.getRoles(), Role.class));
+        HashSet<Role> roleHashSet = new HashSet<>(userDto.getRoles());
+        user.setRoles(mapper.map(roleHashSet, Role.class));
         user = userRepository.save(user);
 
         return mapper.map(user, UserDto.class);

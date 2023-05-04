@@ -2,7 +2,6 @@ package com.hildi.propm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,10 +33,8 @@ public class Task {
     @ToString.Exclude
     private Project project;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    @JsonIgnore
-    @ToString.Exclude
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_id", nullable = false)
     private Role role;
 
     @Column(nullable = false)
@@ -51,22 +48,23 @@ public class Task {
         this.description = description;
     }
 
-    public Task(String name, String description, Project project) {
+    public Task(Long id, String name, String description, Project project) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.project = project;
     }
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Task task = (Task) o;
-        return id != null && Objects.equals(id, task.id);
+        if (!(o instanceof Task task)) return false;
+        return Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(project, task.project) && role == task.role && Objects.equals(createdDate, task.createdDate) && Objects.equals(updatedDate, task.updatedDate);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, name, description, project, role, createdDate, updatedDate);
     }
 }
-

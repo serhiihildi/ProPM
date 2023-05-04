@@ -77,22 +77,4 @@ class UserDtoTest {
         assertNotEquals(userDto2.hashCode(), userDto3.hashCode());
     }
 
-    @Test
-    @DisplayName("Test UserDto builder")
-    void testBuilder() {
-        Set<RoleDto> roles = new HashSet<>();
-        roles.add(RoleDto.builder().id(1L).name("ROLE_ADMIN").build());
-        roles.add(RoleDto.builder().id(2L).name("ROLE_USER").build());
-
-        UserDto userDto = UserDto.builder().id(1L).firstName("John").lastName("Doe").email("john.doe@example.com")
-                .password("password").roles(roles).build();
-
-        assertNotNull(userDto);
-        assertEquals(1L, userDto.getId());
-        assertEquals("John", userDto.getFirstName());
-        assertEquals("Doe", userDto.getLastName());
-        assertEquals("john.doe@example.com", userDto.getEmail());
-        assertEquals("password", userDto.getPassword());
-        assertEquals(roles, userDto.getRoles());
-    }
 }

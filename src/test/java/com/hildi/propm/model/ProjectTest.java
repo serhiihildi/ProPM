@@ -8,16 +8,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Project tests")
 class ProjectTest {
-
-    @Mock
-    private Role role1;
 
     @Mock
     private Task task1;
@@ -40,7 +39,7 @@ class ProjectTest {
         String description = "Description";
         Project project = new Project(id, name, description);
 
-        String expected = "Project(id=1, name=Project 1, description=Description)";
+        String expected = "Project(id=1, name=Project 1, description=Description, roles=[])";
         assertEquals(expected, project.toString());
     }
 
@@ -50,21 +49,20 @@ class ProjectTest {
         Long id = 1L;
         String name = "Project 1";
         String description = "Description 1";
-        List<Role> roles = new ArrayList<>();
-        roles.add(role1);
         List<Task> tasks = new ArrayList<>();
         tasks.add(task1);
 
         project.setId(id);
         project.setName(name);
         project.setDescription(description);
-        project.setRoles(roles);
+        Set<Role> roleSet = Collections.singleton(Role.ROLE_USER);
+        project.setRoles(roleSet);
         project.setTasks(tasks);
 
         assertEquals(id, project.getId());
         assertEquals(name, project.getName());
         assertEquals(description, project.getDescription());
-        assertEquals(roles, project.getRoles());
+        assertEquals(roleSet, project.getRoles());
         assertEquals(tasks, project.getTasks());
     }
 

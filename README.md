@@ -20,6 +20,7 @@ Short project description.
 - Docker Compose
 
 ### Getting Started
+
 To get started with ProPM, follow these steps:
 
 1. Clone the repository: git clone https://github.com/serhiihildi/ProPM.git

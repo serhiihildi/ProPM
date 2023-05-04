@@ -26,7 +26,7 @@ class UserRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("John", "Doe", "johndoe@example.com", "password");
+        user = new User(1L, "John", "Doe", "johndoe@example.com", "password");
     }
 
     @Test

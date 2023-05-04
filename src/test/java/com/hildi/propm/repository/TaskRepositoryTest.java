@@ -34,10 +34,10 @@ class TaskRepositoryTest {
 
         project = new Project(1L, "Project A", "Description A");
 
-        task1 = new Task("Task A", "Description A", project);
+        task1 = new Task(3L, "Task A", "Description A", project);
         task1.setId(1L);
 
-        task2 = new Task("Task B", "Description B", project);
+        task2 = new Task(1L, "Task B", "Description B", project);
         task2.setId(2L);
     }
 

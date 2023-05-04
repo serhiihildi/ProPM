@@ -1,7 +1,8 @@
 package com.hildi.propm.controller;
 
 import com.hildi.propm.model.dto.TaskDto;
-import com.hildi.propm.services.TaskService;
+import com.hildi.propm.services.impl.TaskServiceImpl;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,11 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/projects/{projectId}/tasks")
+@Api(value = "/api/projects/{projectId}/tasks")
 public class TaskController {
-    private final TaskService taskService;
+    private final TaskServiceImpl taskService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskServiceImpl taskService) {
         this.taskService = taskService;
     }
 

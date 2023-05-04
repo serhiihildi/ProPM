@@ -1,26 +1,36 @@
 package com.hildi.propm.controller;
 
 import com.hildi.propm.model.dto.UserDto;
-import com.hildi.propm.services.UserService;
+import com.hildi.propm.services.impl.UserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
 @RequestMapping("/users")
-@Transactional
+@Api(value = "/api/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
+
+    @GetMapping
+    @ApiOperation(value = "Get all users", response = List.class)
+    public List<UserDto> getAllUsers() {
+        log.info("Received request to get all users");
+        return userService.getAllUsers();
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {

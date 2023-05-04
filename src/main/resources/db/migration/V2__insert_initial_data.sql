@@ -1,17 +1,20 @@
-INSERT INTO role (id, name, description) VALUES (1, 'ADMIN', 'Admin role');
-INSERT INTO role (id, name, description) VALUES (2, 'USER', 'User role');
+INSERT INTO project (name, description) VALUES ('Project 1', 'Description of Project 1');
+INSERT INTO project (name, description) VALUES ('Project 2', 'Description of Project 2');
 
-INSERT INTO project (id, name, description) VALUES (1, 'Project 1', 'Project description 1');
-INSERT INTO project (id, name, description) VALUES (2, 'Project 2', 'Project description 2');
+INSERT INTO project_roles (project_id, role) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO project_roles (project_id, role) VALUES (1, 'ROLE_USER');
+INSERT INTO project_roles (project_id, role) VALUES (2, 'ROLE_USER');
 
-INSERT INTO user (id, first_name, last_name, email, password)
-VALUES (1, 'John', 'Doe', 'john.doe@example.com', '$2a$10$Z0Wd8vO1hw0Xg4SmfrxGeurW8cLd0A5S0FtrjZw5zqI5gm5Q9XGnK'); -- password is 'password'
-INSERT INTO user (id, first_name, last_name, email, password)
-VALUES (2, 'Jane', 'Doe', 'jane.doe@example.com', '$2a$10$nSY32wKjywzPNsBwpX9O7e/zUV/XBI0V7NGVAJhOcL7sCVQZzKs7m'); -- password is 'password'
+INSERT INTO role (name, description, project_id) VALUES ('ROLE_ADMIN', 'Administrator', 1);
+INSERT INTO role (name, description, project_id) VALUES ('ROLE_USER', 'Regular user', 1);
+INSERT INTO role (name, description, project_id) VALUES ('ROLE_USER', 'Regular user', 2);
 
-INSERT INTO user_role (user_id, role_id) VALUES (1, 1);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 2);
-INSERT INTO user_role (user_id, role_id) VALUES (2, 2);
+INSERT INTO task (name, description, project_id, role_id, created_date) VALUES ('Task 1', 'Description of Task 1', 1, 1, NOW());
+INSERT INTO task (name, description, project_id, role_id, created_date) VALUES ('Task 2', 'Description of Task 2', 1, 2, NOW());
 
-INSERT INTO task (id, name, description, created_date, updated_date, role_id, project_id) VALUES (1, 'Task 1', 'Task description 1', '2023-04-27 10:30:00', '2023-04-27 11:30:00', 1, 1);
-INSERT INTO task (id, name, description, created_date, updated_date, role_id, project_id) VALUES (2, 'Task 2', 'Task description 2', '2023-04-27 11:30:00', '2023-04-27 12:30:00', 2, 1);
+INSERT INTO user (first_name, last_name, email, password) VALUES ('John', 'Doe', 'john.doe@example.com', 'password');
+INSERT INTO user (first_name, last_name, email, password) VALUES ('Jane', 'Doe', 'jane.doe@example.com', 'password');
+
+INSERT INTO user_role (role_id, user_id) VALUES (1, 1);
+INSERT INTO user_role (role_id, user_id) VALUES (2, 1);
+INSERT INTO user_role (role_id, user_id) VALUES (2, 2);

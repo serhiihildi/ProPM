@@ -16,7 +16,8 @@ services:
       SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
   mysql:
     container_name: mysql
-    image: mysql:latest
+    image: mysql:8.0.28
+    command: --lower-case-table-names=2
     environment:
       MYSQL_DATABASE: propm_db
       MYSQL_ROOT_PASSWORD: root
