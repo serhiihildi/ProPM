@@ -38,7 +38,8 @@
                 <div class="form-group">
                     <label for="roles">Roles</label>
                     <select th:field="*{roles}" multiple class="form-control" id="roles">
-                        <option th:each="role : ${allRoles}" th:value="${role.name()}" th:text="${role.name()}"></option>
+                        <option th:each="role : ${allRoles}" th:value="${role.name()}"
+                                th:text="${role.name()}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Create User</button>

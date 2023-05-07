@@ -35,9 +35,9 @@
             <th>Description</th>
             <th>Status</th>
             <th>Role</th>
-<!--            <th>Assignee</th>-->
-<!--            <th>Created Date</th>-->
-<!--            <th>Updated Date</th>-->
+            <!--            <th>Assignee</th>-->
+            <!--            <th>Created Date</th>-->
+            <!--            <th>Updated Date</th>-->
             <th>Action</th>
         </tr>
         </thead>
@@ -48,13 +48,15 @@
             <td th:text="${task.description}"></td>
             <td th:text="${task.status}"></td>
             <td th:text="${task.role.name}"></td>
-<!--            <td th:if="${task.assignee}" th:text="${task.assignee.name}"></td>-->
-<!--            <td th:text="${task.createdDate}"></td>-->
-<!--            <td th:text="${task.updatedDate}"></td>-->
+            <!--            <td th:if="${task.assignee}" th:text="${task.assignee.name}"></td>-->
+            <!--            <td th:text="${task.createdDate}"></td>-->
+            <!--            <td th:text="${task.updatedDate}"></td>-->
             <td>
                 <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id}}" class="btn btn-primary">View</a>
-                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/edit'}" class="btn btn-secondary">Edit</a>
-                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/delete'}" class="btn btn-danger">Delete</a>
+                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/edit'}"
+                   class="btn btn-secondary">Edit</a>
+                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/delete'}"
+                   class="btn btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>

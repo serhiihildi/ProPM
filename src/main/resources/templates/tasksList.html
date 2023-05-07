@@ -33,7 +33,8 @@
             <td th:text="${task.description}"></td>
             <td th:text="${task.status}"></td>
             <td th:text="${task.user.firstName} + ' ' + ${task.user.lastName}"></td>
-            <td th:text="${task.assignee.firstName} + ' ' + ${task.assignee.lastName}" th:if="${task.assignee != null}"></td>
+            <td th:text="${task.assignee.firstName} + ' ' + ${task.assignee.lastName}"
+                th:if="${task.assignee != null}"></td>
             <td th:text="${task.project.name}"></td>
             <td th:text="${task.role.name}"></td>
             <td th:text="${task.createdDate}"></td>
