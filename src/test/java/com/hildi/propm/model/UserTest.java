@@ -1,98 +1,75 @@
 package com.hildi.propm.model;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Collections;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
-@DisplayName("User class test")
 @ExtendWith(MockitoExtension.class)
 class UserTest {
+
+    private static final String FIRST_NAME = "John";
+    private static final String LAST_NAME = "Doe";
+    private static final String EMAIL = "john.doe@example.com";
+    private static final String PASSWORD = "password123";
 
     @InjectMocks
     private User user;
 
+    @Mock
+    private Role role;
+
+    private Validator validator;
+
     @BeforeEach
-    void setUp() {
-        user = new User(1L, "John", "Doe", "johndoe@example.com", "password");
+    public void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
-    @DisplayName("Test No-args Constructor")
-    void testNoArgsConstructor() {
-        User user = new User();
-
-        assertNull(user.getId());
-        assertNull(user.getFirstName());
-        assertNull(user.getLastName());
-        assertNull(user.getEmail());
-        assertNull(user.getPassword());
+    @DisplayName("Test constructor")
+    void testConstructor() {
+        User newUser = new User(1L, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, null);
+        assertThat(newUser.getFirstName()).isEqualTo(FIRST_NAME);
+        assertThat(newUser.getLastName()).isEqualTo(LAST_NAME);
+        assertThat(newUser.getEmail()).isEqualTo(EMAIL);
+        assertThat(newUser.getPassword()).isEqualTo(PASSWORD);
     }
 
     @Test
-    @DisplayName("User model should be instantiated correctly")
-    void shouldInstantiateUser() {
-        Assertions.assertAll(
-                () -> assertEquals("John", user.getFirstName()),
-                () -> assertEquals("Doe", user.getLastName()),
-                () -> assertEquals("johndoe@example.com", user.getEmail()),
-                () -> assertEquals("password", user.getPassword())
-        );
+    @DisplayName("Test validation with valid data")
+    void testValidationWithValidData() {
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertThat(violations.size()).isEqualTo(0);
     }
 
     @Test
-    @DisplayName("User should have roles")
-    void shouldHaveRoles() {
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.ROLE_USER);
-
-        user.setRoles(roles);
-        assertEquals(1, user.getRoles().size());
+    @DisplayName("Test validation with invalid email")
+    void testValidationWithInvalidEmail() {
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+        user.setEmail("invalid-email");
+        user.setPassword(PASSWORD);
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertThat(violations.size()).isEqualTo(1);
     }
 
-    @Test
-    @DisplayName("User should have ID")
-    void shouldHaveId() {
-        user.setId(1L);
-        assertEquals(1L, user.getId());
-    }
-
-    @Test
-    @DisplayName("User should be equal to another User with the same ID")
-    void shouldBeEqual() {
-        User anotherUser = new User(1L, "John", "Doe", "johndoe@example.com", "password");
-        anotherUser.setId(user.getId());
-        assertEquals(user, anotherUser);
-    }
-
-    @Test
-    @DisplayName("User should not be equal to another User with a different ID")
-    void shouldNotBeEqual() {
-        User anotherUser = new User(1L, "John", "Doe", "johndoe@example.com", "password");
-        anotherUser.setId(2L);
-        Assertions.assertNotEquals(user, anotherUser);
-    }
-
-    @Test
-    @DisplayName("User should have correct toString representation")
-    void shouldHaveCorrectToString() {
-        String expectedToString = "User(id=1, firstName=John, lastName=Doe, email=johndoe@example.com, password=password, roles=[])";
-        assertEquals(expectedToString, user.toString());
-    }
-
-    @Test
-    @DisplayName("User should have correct hash code")
-    void shouldHaveCorrectHashCode() {
-        User anotherUser = new User(1L, "John", "Doe", "johndoe@example.com", "password");
-        assertEquals(user.hashCode(), anotherUser.hashCode());
-    }
 }

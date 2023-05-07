@@ -1,6 +1,5 @@
 package com.hildi.propm.services.impl;
 
-import com.hildi.propm.exception.ResourceNotFoundException;
 import com.hildi.propm.model.Project;
 import com.hildi.propm.model.dto.ProjectDto;
 import com.hildi.propm.repository.ProjectRepository;
@@ -26,48 +25,64 @@ public class ProjectServiceImpl implements ProjectService {
         this.mapper = mapper;
     }
 
+    // Возвращает список всех проектов
     @Override
     public List<ProjectDto> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
+        log.info("Get all projects, count: {}", projects.size());
         return mapper.map(projects, ProjectDto.class);
     }
 
+    // Возвращает проект по его id, если он существует
     @Override
-    public ProjectDto getProjectById(Long id) {
+    public Optional<ProjectDto> getProjectById(Long id) {
         Optional<Project> projectOptional = projectRepository.findById(id);
         if (projectOptional.isPresent()) {
             Project project = projectOptional.get();
-            return mapper.map(project, ProjectDto.class);
+            log.info("Get project by id: {}", id);
+            return Optional.of(mapper.map(project, ProjectDto.class));
         } else {
-            throw new ResourceNotFoundException("Project with id " + id + " not found");
+            log.warn("Project with id {} not found", id);
+            return Optional.empty();
         }
     }
 
+    // Создает новый проект и возвращает его
     @Override
     public ProjectDto createProject(ProjectDto projectDto) {
         Project project = mapper.map(projectDto, Project.class);
         project = projectRepository.save(project);
+        log.info("Create project with id: {}", project.getId());
         return mapper.map(project, ProjectDto.class);
     }
 
+    // Обновляет проект с заданным id и возвращает обновленный проект
     @Override
-    public ProjectDto updateProject(Long id, ProjectDto projectDto) {
-        log.debug("Updating project with id {}: {}", id, projectDto);
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Project", "id", id));
-        projectRepository.save(project);
-        ProjectDto updatedProjectDto = mapper.map(project, ProjectDto.class);
-        log.debug("Updated project: {}", updatedProjectDto);
-        return updatedProjectDto;
+    public Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            project = projectRepository.save(project);
+            log.info("Update project with id: {}", project.getId());
+            return Optional.of(mapper.map(project, ProjectDto.class));
+        } else {
+            log.warn("Project with id {} not found", id);
+            return Optional.empty();
+        }
     }
 
-
+    // Удаляет проект с заданным id и возвращает true, если удаление выполнено успешно
     @Override
-    public void deleteProject(Long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
-
-        projectRepository.delete(project);
+    public boolean deleteProject(Long id) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        if (projectOptional.isPresent()) {
+            projectRepository.delete(projectOptional.get());
+            log.info("Delete project with id: {}", id);
+            return true;
+        } else {
+            log.warn("Project with id {} not found", id);
+            return false;
+        }
     }
+
 }
-

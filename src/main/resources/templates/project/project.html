@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="header"></div>
+<div class="container">
+    <h1>Project Details</h1>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <td th:text="${project.id}"></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td th:text="${project.name}"></td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td th:text="${project.description}"></td>
+        </tr>
+    </table>
+    <h2>Tasks</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Role</th>
+<!--            <th>Assignee</th>-->
+<!--            <th>Created Date</th>-->
+<!--            <th>Updated Date</th>-->
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${project.tasks}">
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.name}"></td>
+            <td th:text="${task.description}"></td>
+            <td th:text="${task.status}"></td>
+            <td th:text="${task.role.name}"></td>
+<!--            <td th:if="${task.assignee}" th:text="${task.assignee.name}"></td>-->
+<!--            <td th:text="${task.createdDate}"></td>-->
+<!--            <td th:text="${task.updatedDate}"></td>-->
+            <td>
+                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id}}" class="btn btn-primary">View</a>
+                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/edit'}" class="btn btn-secondary">Edit</a>
+                <a th:href="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id} + '/delete'}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/projects}" class="btn btn-primary">Back to Project List</a>
+</div>
+</body>
+</html>

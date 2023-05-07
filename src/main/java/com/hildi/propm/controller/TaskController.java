@@ -1,80 +1,89 @@
 package com.hildi.propm.controller;
 
+import com.hildi.propm.model.Task;
 import com.hildi.propm.model.dto.TaskDto;
-import com.hildi.propm.services.impl.TaskServiceImpl;
-import io.swagger.annotations.Api;
+import com.hildi.propm.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.net.URI;
-import java.util.List;
+import javax.validation.Valid;
 
-@RestController
+@Controller
 @Slf4j
 @RequestMapping("/projects/{projectId}/tasks")
-@Api(value = "/api/projects/{projectId}/tasks")
 public class TaskController {
-    private final TaskServiceImpl taskService;
+    private final TaskService taskService;
 
-    public TaskController(TaskServiceImpl taskService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<TaskDto>> getAllTasksForProject(@PathVariable Long projectId) {
-        log.info("Get all tasks for project with id {}", projectId);
-        List<TaskDto> tasks = taskService.getAllTasksByProjectId(projectId);
-        return ResponseEntity.ok(tasks);
+    @GetMapping("/all")
+    public ModelAndView getAll() {
+        log.info("Getting all tasks");
+        ModelAndView modelAndView = new ModelAndView("tasksList");
+        modelAndView.addObject("tasks", taskService.getAllTasks());
+        return modelAndView;
     }
 
-    @GetMapping("/{taskId}")
-    public ResponseEntity<TaskDto> getTaskById(@PathVariable Long projectId, @PathVariable Long taskId) {
-        log.info("Get task with id {} for project with id {}", taskId, projectId);
-        TaskDto task = taskService.getTaskByIdAndProjectId(taskId, projectId);
-        if (task == null) {
-            log.warn("Task with id {} for project with id {} not found", taskId, projectId);
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(task);
+    @GetMapping("/{id}")
+    public ModelAndView getTask(@PathVariable Long id) {
+        log.info("Getting task with id {}", id);
+        ModelAndView modelAndView = new ModelAndView("taskDetails");
+        modelAndView.addObject("task", taskService.getTaskById(id));
+        return modelAndView;
     }
 
-    @PostMapping("")
-    public ResponseEntity<TaskDto> createTask(@PathVariable Long projectId, @RequestBody TaskDto taskDto) {
-        log.info("Create task for project with id {}", projectId);
-        TaskDto createdTask = taskService.createTask(projectId, taskDto);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdTask.getId())
-                .toUri();
-        log.info("Task with id {} for project with id {} has been created", createdTask.getId(), projectId);
-        return ResponseEntity.created(location).body(createdTask);
+    @GetMapping("/new")
+    public ModelAndView newTaskForm() {
+        log.info("Getting form for new task");
+        ModelAndView modelAndView = new ModelAndView("newTask");
+        modelAndView.addObject("task", new Task());
+        return modelAndView;
     }
 
-    @PutMapping("/{taskId}")
-    public ResponseEntity<TaskDto> updateTask(@PathVariable Long projectId, @PathVariable Long taskId, @RequestBody TaskDto taskDto) {
-        log.info("Update task with id {} for project with id {}", taskId, projectId);
-        TaskDto updatedTask = taskService.updateTask(projectId, taskId, taskDto);
-        if (updatedTask == null) {
-            log.warn("Task with id {} for project with id {} not found", taskId, projectId);
-            return ResponseEntity.notFound().build();
-        }
-        log.info("Task with id {} for project with id {} has been updated", taskId, projectId);
-        return ResponseEntity.ok(updatedTask);
-    }
-
-    @DeleteMapping("/{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long projectId, @PathVariable Long taskId) {
-        log.info("Delete task with id {} for project with id {}", taskId, projectId);
-        boolean deleted = taskService.deleteTask(taskId, projectId);
-        if (deleted) {
-            log.info("Task with id {} for project with id {} has been deleted", taskId, projectId);
-            return ResponseEntity.noContent().build();
+    @PostMapping
+    public ModelAndView createTask(@Valid TaskDto task, BindingResult bindingResult) {
+        log.info("Creating new task");
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("newTask");
         } else {
-            log.warn("Task with id {} for project with id {} not found", taskId, projectId);
-            return ResponseEntity.notFound().build();
+            taskService.createTask(task);
+            modelAndView.setViewName("redirect:/tasks");
         }
+        return modelAndView;
     }
 
+    @GetMapping("/{id}/edit")
+    public ModelAndView editTaskForm(@PathVariable Long id) {
+        log.info("Getting form to edit task with id {}", id);
+        ModelAndView modelAndView = new ModelAndView("editTask");
+        modelAndView.addObject("task", taskService.getTaskById(id));
+        return modelAndView;
+    }
+
+    @PostMapping("/{id}")
+    public ModelAndView editTask(@PathVariable Long id, @Valid TaskDto task, BindingResult bindingResult) {
+        log.info("Editing task with id {}", id);
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("editTask");
+            modelAndView.addObject("task", task);
+        } else {
+            taskService.updateTask(id, task);
+            modelAndView.setViewName("redirect:/projects/{projectId}/tasks/all");
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/{id}/delete")
+    public ModelAndView deleteTask(@PathVariable Long id) {
+        log.info("Deleting task with id {}", id);
+        taskService.deleteTask(id);
+        return new ModelAndView("redirect:/projects/{projectId}/tasks");
+    }
 }

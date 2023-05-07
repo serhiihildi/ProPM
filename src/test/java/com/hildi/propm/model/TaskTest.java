@@ -1,96 +1,99 @@
 package com.hildi.propm.model;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("Task Model Test")
 class TaskTest {
+
+    private Task task;
+
+    @Mock
+    private User user;
 
     @Mock
     private Project project;
 
-    private final LocalDateTime createdDate = LocalDateTime.of(2022, 1, 1, 0, 0);
-    private final LocalDateTime updatedDate = LocalDateTime.of(2022, 1, 2, 0, 0);
+    @Mock
+    private Role role;
 
-    @Test
-    @DisplayName("Create Task with null values")
-    void createTaskWithNullValues() {
-        Task task = new Task(null, null, null, null, null, null, null);
-        assertNull(task.getId());
-        assertNull(task.getName());
-        assertNull(task.getDescription());
-        assertNull(task.getProject());
-        assertNull(task.getRole());
-        assertNull(task.getCreatedDate());
-        assertNull(task.getUpdatedDate());
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        task = Task.builder()
+                .id(1L)
+                .name("Test task")
+                .description("Test description")
+                .project(project)
+                .role(role)
+                .status(TaskStatus.NEW)
+                .creator(user)
+                .assignee(user)
+                .build();
     }
 
+    @DisplayName("Test getters and setters")
     @Test
-    @DisplayName("Create Task with non-null values")
-    void createTaskWithNonNullValues() {
-        Project project = new Project(1L, "Test Project", "Test project description", null, null);
-        Role role = Role.ROLE_USER;
-        LocalDateTime createdDate = LocalDateTime.now();
-        LocalDateTime updatedDate = LocalDateTime.now().plusHours(1);
-
-        Task task = new Task(1L, "Test Task", "Test task description", project, role, createdDate, updatedDate);
-
-        assertEquals(1L, task.getId());
-        assertEquals("Test Task", task.getName());
-        assertEquals("Test task description", task.getDescription());
+    void testGettersAndSetters() {
+        assertNotNull(task.getId());
+        assertEquals("Test task", task.getName());
+        assertEquals("Test description", task.getDescription());
         assertEquals(project, task.getProject());
         assertEquals(role, task.getRole());
-        assertEquals(createdDate, task.getCreatedDate());
-        assertEquals(updatedDate, task.getUpdatedDate());
+        assertEquals(TaskStatus.NEW, task.getStatus());
+        assertEquals(user, task.getCreator());
+        assertEquals(user, task.getAssignee());
+        LocalDateTime now = LocalDateTime.now();
+        task.setCreatedDate(now);
+        assertEquals(now, task.getCreatedDate());
+        task.setUpdatedDate(now);
+        assertEquals(now, task.getUpdatedDate());
     }
 
+    @DisplayName("Test equals and hashCode")
     @Test
-    @DisplayName("Equals and Hashcode methods")
-    void equalsAndHashCodeMethods() {
-        Task task1 = new Task(1L, "Test Task", "Test task description");
-        Task task2 = new Task(1L, "Test Task", "Test task description");
-        Task task3 = new Task(2L, "Another Task", "Another task description");
-
-        // Test equals method
-        assertEquals(task1, task2);
-        assertNotEquals(task1, task3);
-
-        // Test hashcode method
-        assertEquals(task1.hashCode(), task2.hashCode());
+    void testEqualsAndHashCode() {
+        Task task1 = Task.builder()
+                .id(task.getId())
+                .name("Test task")
+                .description("Test description")
+                .project(project)
+                .role(role)
+                .status(TaskStatus.NEW)
+                .creator(user)
+                .assignee(user)
+                .build();
+        Task task2 = Task.builder()
+                .id(task.getId())
+                .name("Test task 2")
+                .description("Test description 2")
+                .project(project)
+                .role(role)
+                .status(TaskStatus.IN_PROGRESS)
+                .creator(user)
+                .assignee(user)
+                .build();
+        assertEquals(task, task1);
+        assertEquals(task.hashCode(), task1.hashCode());
     }
 
+    @DisplayName("Test prePersist method")
     @Test
-    @DisplayName("Test Getters and Setters")
-    void testGettersAndSetters() {
-        Task task = new Task();
+    void testPrePersist() {
+        assertNull(task.getCreatedDate());
+        assertNull(task.getUpdatedDate());
+        task.prePersist();
+        assertNotNull(task.getCreatedDate());
+    }
 
-        task.setId(1L);
-        assertEquals(1L, task.getId());
-
-        task.setName("Task 1");
-        assertEquals("Task 1", task.getName());
-
-        task.setDescription("Description 1");
-        assertEquals("Description 1", task.getDescription());
-
-        task.setProject(project);
-        assertEquals(project, task.getProject());
-
-        task.setRole(Role.ROLE_ADMIN);
-        assertEquals(Role.ROLE_ADMIN, task.getRole());
-
-        task.setCreatedDate(createdDate);
-        assertEquals(createdDate, task.getCreatedDate());
-
-        task.setUpdatedDate(updatedDate);
-        assertEquals(updatedDate, task.getUpdatedDate());
+    @DisplayName("Test toString method")
+    @Test
+    void testToString() {
+        assertNotNull(task.toString());
     }
 }

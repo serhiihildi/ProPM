@@ -1,124 +1,92 @@
-package com.hildi.propm.repository;
-
-import com.hildi.propm.model.Project;
-import com.hildi.propm.model.Task;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import com.hildi.propm.model.Project;
+import com.hildi.propm.model.Task;
+import com.hildi.propm.repository.TaskRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("Task Repository Test")
+@ExtendWith(MockitoExtension.class)
 class TaskRepositoryTest {
 
     @Mock
     private TaskRepository taskRepository;
 
     @InjectMocks
-    private Project project;
-    private Task task1;
-    private Task task2;
+    private Task task;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-        project = new Project(1L, "Project A", "Description A");
-
-        task1 = new Task(3L, "Task A", "Description A", project);
-        task1.setId(1L);
-
-        task2 = new Task(1L, "Task B", "Description B", project);
-        task2.setId(2L);
+        Project project = Project.builder().id(1L).name("Project").description("Project description").build();
+        task = Task.builder().id(1L).name("Task").description("Task description").project(project).build();
     }
 
     @Test
-    @DisplayName("Save Task Test")
+    @DisplayName("Test save task")
     void testSaveTask() {
-        when(taskRepository.save(task1)).thenReturn(task1);
-
-        Task savedTask = taskRepository.save(task1);
-
-        assertEquals(task1, savedTask, "Saved task should be equal to the original task");
-
-        verify(taskRepository, times(1)).save(task1);
+        when(taskRepository.save(task)).thenReturn(task);
+        Task savedTask = taskRepository.save(task);
+        assertNotNull(savedTask);
+        assertEquals(savedTask, task);
     }
 
     @Test
-    @DisplayName("Find Task By Id Test")
-    void testFindTaskById() {
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task1));
-
-        Optional<Task> foundTask = taskRepository.findById(1L);
-
-        assertTrue(foundTask.isPresent(), "Expected task to be found, but it was not");
-
-        assertEquals(task1, foundTask.get(), "Found task should be equal to the original task");
-
-        verify(taskRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    @DisplayName("Find All Tasks Test")
+    @DisplayName("Test find all tasks")
     void testFindAllTasks() {
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(task1);
-        tasks.add(task2);
-
-        when(taskRepository.findAll()).thenReturn(tasks);
-
+        List<Task> taskList = new ArrayList<>();
+        taskList.add(task);
+        when(taskRepository.findAll()).thenReturn(taskList);
         List<Task> foundTasks = taskRepository.findAll();
-
-        assertEquals(tasks, foundTasks, "Found tasks should be equal to the original tasks");
-
-        verify(taskRepository, times(1)).findAll();
+        assertNotNull(foundTasks);
+        assertEquals(foundTasks, taskList);
     }
 
     @Test
-    @DisplayName("Delete Task Test")
+    @DisplayName("Test find task by id")
+    void testFindTaskById() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        Optional<Task> foundTask = taskRepository.findById(1L);
+        assertNotNull(foundTask);
+        assertTrue(foundTask.isPresent());
+        assertEquals(foundTask.get(), task);
+    }
+
+    @Test
+    @DisplayName("Test find tasks by project")
+    void testFindTasksByProject() {
+        List<Task> taskList = new ArrayList<>();
+        taskList.add(task);
+        when(taskRepository.findByProject(task.getProject())).thenReturn(taskList);
+        List<Task> foundTasks = taskRepository.findByProject(task.getProject());
+        assertNotNull(foundTasks);
+        assertEquals(foundTasks, taskList);
+    }
+
+    @Test
+    @DisplayName("Test find task by id and project id")
+    void testFindTaskByIdAndProjectId() {
+        when(taskRepository.findByIdAndProjectId(1L, task.getProject().getId())).thenReturn(Optional.of(task));
+        Optional<Task> foundTask = taskRepository.findByIdAndProjectId(1L, task.getProject().getId());
+        assertNotNull(foundTask);
+        assertTrue(foundTask.isPresent());
+        assertEquals(foundTask.get(), task);
+    }
+
+    @Test
+    @DisplayName("Test delete task")
     void testDeleteTask() {
-        doNothing().when(taskRepository).deleteById(1L);
-
         taskRepository.deleteById(1L);
-
-        verify(taskRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
-    @DisplayName("Find By Project Test")
-    void testFindByProject() {
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(task1);
-
-        when(taskRepository.findByProject(project)).thenReturn(tasks);
-
-        List<Task> foundTasks = taskRepository.findByProject(project);
-        assertEquals(tasks.size(), foundTasks.size(), "Number of found tasks should be equal to the number of expected tasks");
-        assertEquals(tasks.get(0).getId(), foundTasks.get(0).getId(), "Found task should have the same id as the expected task");
-        assertEquals(tasks.get(0).getName(), foundTasks.get(0).getName(), "Found task should have the same name as the expected task");
-        assertEquals(tasks.get(0).getDescription(), foundTasks.get(0).getDescription(), "Found task should have the same description as the expected task");
-        assertEquals(tasks.get(0).getProject().getId(), foundTasks.get(0).getProject().getId(), "Found task should have the same project id as the expected task");
-    }
-
-    @Test
-    @DisplayName("Find By Id And Project Id Test")
-    void testFindByIdAndProjectId() {
-        when(taskRepository.findByIdAndProjectId(task1.getId(), project.getId())).thenReturn(Optional.of(task1));
-
-        Optional<Task> foundTask = taskRepository.findByIdAndProjectId(task1.getId(), project.getId());
-        assertEquals(task1.getId(), foundTask.get().getId(), "Found task should have the same id as the expected task");
-        assertEquals(task1.getName(), foundTask.get().getName(), "Found task should have the same name as the expected task");
-        assertEquals(task1.getDescription(), foundTask.get().getDescription(), "Found task should have the same description as the expected task");
-        assertEquals(task1.getProject().getId(), foundTask.get().getProject().getId(), "Found task should have the same project id as the expected task");
+        assertFalse(taskRepository.findById(1L).isPresent());
     }
 
 }

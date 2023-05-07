@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>Edit Project</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div th:replace="header"></div>
 <div class="container">
     <h1>Edit Project</h1>
     <form th:object="${project}" th:action="@{/projects/{id}(id=${project.id})}" method="post">
@@ -21,13 +23,13 @@
             <label for="description">Description:</label>
             <textarea class="form-control" id="description" th:field="*{description}"></textarea>
         </div>
-        <div class="form-group">
-            <label for="roles">Roles:</label>
-            <div class="form-check" th:each="role : ${#sets.toSet(T(com.hildi.propm.model.Role).values())}">
-                <input class="form-check-input" type="checkbox" th:field="*{roles}" th:value="${role}">
-                <label class="form-check-label" th:text="${role}"></label>
-            </div>
-        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="roles">Roles:</label>-->
+<!--            <div class="form-check" th:each="role : ${#sets.toSet(T(com.hildi.propm.model.Role).values())}">-->
+<!--                <input class="form-check-input" type="checkbox" th:checked="${project.roles.contains(role)}" th:onclick="${project.addRole(role)}">-->
+<!--                <label class="form-check-label" th:text="${role}"></label>-->
+<!--            </div>-->
+<!--        </div>-->
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>

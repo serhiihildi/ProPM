@@ -5,19 +5,20 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public interface UserService {
     List<UserDto> getAllUsers();
 
-    UserDto getUserById(Long id);
+    Optional<UserDto> getUserById(Long id);
 
     UserDto createUser(UserDto userDto);
 
-    UserDto updateUser(Long id, UserDto userDto);
+    Optional<UserDto> updateUser(Long id, UserDto userDto);
 
-    void deleteUser(Long id);
+    boolean deleteUser(Long id);
 }
 
 

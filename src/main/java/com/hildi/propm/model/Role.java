@@ -1,27 +1,55 @@
 package com.hildi.propm.model;
 
-import org.springframework.security.core.GrantedAuthority;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-public enum Role implements GrantedAuthority {
-    ROLE_ADMIN("Администратор"),
-    ROLE_USER("Пользователь");
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Objects;
 
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "role")
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Size(min = 3, max = 255)
+    @Column(unique = true)
+    private String name;
+
+    @Size(max = 255)
     private String description;
 
-    Role(String description) {
-        this.description = description;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    @ToString.Exclude
+    private Project project;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    @Override
+    public String toString() {
+        return name;
     }
 
     @Override
-    public String getAuthority() {
-        return name();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Role role = (Role) o;
+        return getId() != null && Objects.equals(getId(), role.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Tasks List</h1>
+    <a class="btn btn-primary mb-3" th:href="@{/task/new}"><i class="fas fa-plus"></i> Add Task</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Creator</th>
+            <th>Assignee</th>
+            <th>Project</th>
+            <th>Role</th>
+            <th>Created Date</th>
+            <th>Updated Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.name}"></td>
+            <td th:text="${task.description}"></td>
+            <td th:text="${task.status}"></td>
+            <td th:text="${task.user.firstName} + ' ' + ${task.user.lastName}"></td>
+            <td th:text="${task.assignee.firstName} + ' ' + ${task.assignee.lastName}" th:if="${task.assignee != null}"></td>
+            <td th:text="${task.project.name}"></td>
+            <td th:text="${task.role.name}"></td>
+            <td th:text="${task.createdDate}"></td>
+            <td th:text="${task.updatedDate}" th:if="${task.updatedDate != null}"></td>
+            <td>
+                <a th:href="@{'/tasks/' + ${task.id}}" class="btn btn-primary btn-sm">Details</a>
+                <a th:href="@{'/tasks/' + ${task.id} + '/edit'}" class="btn btn-secondary btn-sm">Edit</a>
+                <form th:action="@{'/tasks/' + ${task.id}}" method="post" style="display: inline-block;">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

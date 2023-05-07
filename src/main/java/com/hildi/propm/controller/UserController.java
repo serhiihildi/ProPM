@@ -1,65 +1,79 @@
 package com.hildi.propm.controller;
 
 import com.hildi.propm.model.dto.UserDto;
-import com.hildi.propm.services.impl.UserServiceImpl;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.hildi.propm.services.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
-@RestController
 @Slf4j
+@Controller
 @RequestMapping("/users")
-@Api(value = "/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
+    @GetMapping("/all")
+    public ModelAndView getAll() {
+        ModelAndView modelAndView = new ModelAndView("user/usersList");
+        modelAndView.addObject("users", userService.getAllUsers());
+        return modelAndView;
     }
 
-    @GetMapping
-    @ApiOperation(value = "Get all users", response = List.class)
-    public List<UserDto> getAllUsers() {
-        log.info("Received request to get all users");
-        return userService.getAllUsers();
-    }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        log.info("Getting user by id: {}", id);
-        UserDto userDto = userService.getUserById(id);
-        return ResponseEntity.ok(userDto);
+    @GetMapping("/new")
+    public ModelAndView create() {
+        ModelAndView modelAndView = new ModelAndView("user/createUser");
+        modelAndView.addObject("user", new UserDto());
+        return modelAndView;
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
-        log.info("Creating user: {}", userDto);
-        UserDto createdUser = userService.createUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    public ModelAndView create(@ModelAttribute("user") @Valid UserDto userDto, BindingResult result) {
+        if (result.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("user/createUser");
+            modelAndView.addObject("user", userDto);
+            return modelAndView;
+        }
+
+        userService.createUser(userDto);
+        return new ModelAndView("redirect:/users/all");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
-        log.info("Updating user with id {} to: {}", id, userDto);
-        UserDto updatedUser = userService.updateUser(id, userDto);
-        return ResponseEntity.ok(updatedUser);
+    @GetMapping("/{id}")
+    public ModelAndView getById(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("user/userDetails");
+        modelAndView.addObject("user", userService.getUserById(id));
+        return modelAndView;
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        log.info("Deleting user with id: {}", id);
+    @GetMapping("/{id}/edit")
+    public ModelAndView edit(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("user/editUser");
+        modelAndView.addObject("user", userService.getUserById(id));
+        return modelAndView;
+    }
+
+    @PostMapping("/{id}")
+    public ModelAndView edit(@PathVariable("id") Long id, @ModelAttribute("user") @Valid UserDto userDto, BindingResult result) {
+        if (result.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("user/editUser");
+            modelAndView.addObject("user", userDto);
+            return modelAndView;
+        }
+
+        userService.updateUser(id, userDto);
+        return new ModelAndView("redirect:/users/" + id);
+    }
+
+    @PostMapping("/{id}/delete")
+    public ModelAndView delete(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return new ModelAndView("redirect:/users/all");
     }
-
-
 }
-

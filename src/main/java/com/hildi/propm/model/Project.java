@@ -1,55 +1,66 @@
 package com.hildi.propm.model;
 
 import lombok.*;
-
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.*;
 
 @Entity
 @Table(name = "project")
 @Getter
 @Setter
-@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Description is mandatory")
     private String description;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "project_roles", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    @OneToMany(mappedBy = "project")
+    private List<Task> tasks;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "project")
+    private List<Role> roles;
 
-    public Project(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    @ManyToMany
+    @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users = new HashSet<>();
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+
+    public void removeUser(User user) {
+        this.users.remove(user);
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Project project)) return false;
-        return Objects.equals(id, project.id) && Objects.equals(name, project.name) && Objects.equals(description, project.description) && Objects.equals(roles, project.roles) && Objects.equals(tasks, project.tasks);
+        return Objects.equals(getId(), project.getId()) &&
+                Objects.equals(getName(), project.getName()) &&
+                Objects.equals(getDescription(), project.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, roles, tasks);
+        return Objects.hash(getId(), getName(), getDescription());
     }
 }

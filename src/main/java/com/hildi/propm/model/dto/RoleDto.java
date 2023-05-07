@@ -6,26 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import javax.validation.constraints.Size;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ProjectDto {
-
+public class RoleDto {
     private Long id;
 
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank
+    @Size(min = 3, max = 255)
     private String name;
 
-    @NotBlank(message = "Description is mandatory")
+    @Size(max = 255)
     private String description;
 
-    private List<TaskDto> tasks;
+    private Long projectId;
 
-    private List<RoleDto> roles;
-
-//    private Set<UserDto> users;
 }
-

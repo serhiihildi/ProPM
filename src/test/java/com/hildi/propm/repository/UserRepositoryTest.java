@@ -1,102 +1,69 @@
-package com.hildi.propm.repository;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import com.hildi.propm.model.User;
+import com.hildi.propm.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
-@DisplayName("User Repository Tests")
 class UserRepositoryTest {
 
     @Mock
     private UserRepository userRepository;
 
+    @InjectMocks
     private User user;
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "John", "Doe", "johndoe@example.com", "password");
+        user = User.builder().id(1L).firstName("John").lastName("Doe").build();
     }
 
     @Test
-    @DisplayName("Save User Test")
+    @DisplayName("Test save user")
     void testSaveUser() {
-        // configure the mock to return the user
         when(userRepository.save(user)).thenReturn(user);
-
-        // save the user
         User savedUser = userRepository.save(user);
-
-        // verify that the user was saved
-        assertEquals(user, savedUser);
-
-        // verify that the save method was called once
-        verify(userRepository, times(1)).save(user);
+        assertNotNull(savedUser);
+        assertEquals(savedUser, user);
     }
 
     @Test
-    @DisplayName("Find User By Id Test")
-    void testFindUserById() {
-        // configure the mock to return the user
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        // find the user
-        Optional<User> foundUser = userRepository.findById(1L);
-
-        // verify that the user was found
-        assertTrue(foundUser.isPresent());
-        assertEquals(user, foundUser.get());
-
-        // verify that the findById method was called once
-        verify(userRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    @DisplayName("Find All Users Test")
+    @DisplayName("Test find all users")
     void testFindAllUsers() {
-        // configure the mock to return a list of users
-        List<User> userList = Arrays.asList(user);
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
         when(userRepository.findAll()).thenReturn(userList);
-
-        // find all users
         List<User> foundUsers = userRepository.findAll();
-
-        // verify that the users were found
-        assertFalse(foundUsers.isEmpty());
-        assertEquals(userList, foundUsers);
-
-        // verify that the findAll method was called once
-        verify(userRepository, times(1)).findAll();
+        assertNotNull(foundUsers);
+        assertEquals(foundUsers, userList);
     }
 
     @Test
-    @DisplayName("Delete User Test")
-    void testDeleteUser() {
-        // configure the mock to return the saved project
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        // save the project
-        User savedProject = userRepository.save(user);
-
-        // delete the user
-        userRepository.deleteById(1L);
-
-        // verify that the user was deleted
-        Optional<User> deletedUser = userRepository.findById(1L);
-        assertFalse(deletedUser.isPresent(), "Expected user to be deleted but it still exists");
-
-        // verify that the deleteById method was called once
-        verify(userRepository, times(1)).deleteById(1L);
+    @DisplayName("Test find user by id")
+    void testFindUserById() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Optional<User> foundUser = userRepository.findById(1L);
+        assertNotNull(foundUser);
+        assertTrue(foundUser.isPresent());
+        assertEquals(foundUser.get(), user);
     }
+
+    @Test
+    @DisplayName("Test delete user")
+    void testDeleteUser() {
+        userRepository.deleteById(1L);
+        assertFalse(userRepository.findById(1L).isPresent());
+    }
+
 }

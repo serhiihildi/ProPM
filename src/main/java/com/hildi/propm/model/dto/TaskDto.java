@@ -1,13 +1,14 @@
 package com.hildi.propm.model.dto;
 
+import com.hildi.propm.model.Role;
+import com.hildi.propm.model.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -17,29 +18,24 @@ public class TaskDto {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Task name is required")
     private String name;
 
+    @NotBlank(message = "Task description is required")
     private String description;
 
+    @NotNull(message = "Task project is required")
     private Long projectId;
 
-    private Long roleId;
+    @NotNull(message = "Task role is required")
+    private Role role;
 
-    private LocalDateTime createdDate;
+    @NotNull(message = "Task status is required")
+    private TaskStatus status;
 
-    private LocalDateTime updatedDate;
+    @NotNull(message = "Task creator is required")
+    private Long creatorId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TaskDto taskDto)) return false;
-        return Objects.equals(id, taskDto.id) && Objects.equals(name, taskDto.name) && Objects.equals(description, taskDto.description) && Objects.equals(projectId, taskDto.projectId) && Objects.equals(roleId, taskDto.roleId) && Objects.equals(createdDate, taskDto.createdDate) && Objects.equals(updatedDate, taskDto.updatedDate);
-    }
+    private Long assigneeId;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, projectId, roleId, createdDate, updatedDate);
-    }
 }
-
